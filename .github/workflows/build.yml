@@ -11,6 +11,7 @@ jobs:
         run: |
           SDKROOT=$(xcrun --sdk iphoneos --show-sdk-path)
           clang++ -shared -fobjc-arc -O2 \
+            -std=c++17 \
             -isysroot $SDKROOT \
             -arch arm64 \
             -miphoneos-version-min=15.0 \
