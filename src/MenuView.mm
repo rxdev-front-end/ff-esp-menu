@@ -11,14 +11,14 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8];
+        self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.85];
         self.layer.cornerRadius = 10;
-        self.layer.borderWidth = 1;
-        self.layer.borderColor = [UIColor greenColor].CGColor;
+        self.layer.borderWidth = 1.5;
+        self.layer.borderColor = [UIColor colorWithRed:0.2 green:1.0 blue:0.4 alpha:1.0].CGColor;
 
         UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(15, 10, 180, 20)];
         title.text = @"FF Menu - ollie";
-        title.textColor = [UIColor greenColor];
+        title.textColor = [UIColor colorWithRed:0.2 green:1.0 blue:0.4 alpha:1.0];
         title.font = [UIFont boldSystemFontOfSize:16];
         [self addSubview:title];
 
@@ -28,7 +28,7 @@
         [self addSubview:espLabel];
 
         UISwitch *espSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(140, 45, 51, 31)];
-        espSwitch.onTintColor = [UIColor greenColor];
+        espSwitch.onTintColor = [UIColor colorWithRed:0.2 green:1.0 blue:0.4 alpha:1.0];
         [espSwitch addTarget:self action:@selector(toggleESP:) forControlEvents:UIControlEventValueChanged];
         [self addSubview:espSwitch];
 
