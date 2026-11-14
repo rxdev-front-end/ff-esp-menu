@@ -2,7 +2,6 @@
 #include "esp.hpp"
 
 @interface ESPView : UIView
-@property (nonatomic, strong) NSTimer *timer;
 @end
 
 @implementation ESPView
@@ -11,28 +10,36 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
-        self.userInteractionEnabled = NO; // Deixa os toques passarem pro jogo
+        self.userInteractionEnabled = NO; // Deixa os dedos passarem pro jogo
         
-        // Roda o tick do ESP 60 vezes por segundo
-        self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0/60.0 target:self selector:@selector(update) userInfo:nil repeats:YES];
+        CADisplayLink *link = [CADisplayLink displayLinkWithTarget:self selector:@selector(update)];
+        [link addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     }
     return self;
 }
 
 - (void)update {
-    ESP::tick();
-    [self setNeedsDisplay]; // Manda a view se redesenhar
+    ESP::tick(self.bounds.size.width, self.bounds.size.height);
+    [self setNeedsDisplay];
 }
 
 - (void)drawRect:(CGRect)rect {
-    if (!ESP::enabled) return;
+    if (!ESP::enabled || ESP::screenPositions.empty()) return;
 
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetStrokeColorWithColor(context, [UIColor redColor].CGColor);
-    CGContextSetLineWidth(context, 2.0);
-    
-    // Exemplo de caixa fixa no meio da tela
-    CGContextStrokeRect(context, CGRectMake(100, 100, 100, 150));
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    // Cor vermelha pra inimigo
+    CGContextSetStrokeColorWithColor(ctx, [UIColor redColor].CGColor);
+    CGContextSetLineWidth(ctx, 2.0);
+
+    for (const auto& pos : ESP::screenPositions) {
+        // Desenha a caixa em volta do osso da cabeça
+        CGRect box = CGRectMake(pos.x - 25, pos.y - 40, 50, 80);
+        CGContextStrokeRect(ctx, box);
+        
+        // Desenha a linha de mira (Skeleton simples)
+        CGContextMoveToPoint(ctx, pos.x, pos.y - 40);
+        CGContextAddLineToPoint(ctx, pos.x, pos.y + 40);
+        CGContextStrokePath(ctx);
+    }
 }
-
 @end
