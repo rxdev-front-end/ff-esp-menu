@@ -1,5 +1,5 @@
 #import <UIKit/UIKit.h>
-#include "esp.hpp" // <- AQUI ESTAVA O ERRO
+#include "esp.hpp"
 
 @interface MenuView : UIView
 @end
@@ -19,21 +19,17 @@ static void on_load() {
                 }
             }
         }
-        // Ignora o aviso do keyWindow deprecated, ele funciona de boa
         if (!keyWindow) keyWindow = [UIApplication sharedApplication].keyWindow;
 
         if (keyWindow) {
             UIViewController *rootVC = keyWindow.rootViewController;
             if (!rootVC) return;
 
-            // Inicializa a base do Unity
             ESP::init();
 
-            // Adiciona o Desenho
             ESPView *esp = [[ESPView alloc] initWithFrame:keyWindow.bounds];
             [rootVC.view addSubview:esp];
 
-            // Adiciona o Menu
             MenuView *menu = [[MenuView alloc] initWithFrame:CGRectMake(40, 100, 220, 100)];
             [rootVC.view addSubview:menu];
         }
